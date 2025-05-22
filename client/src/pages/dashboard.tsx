@@ -32,6 +32,7 @@ import { AvatarPlaceholder } from "@/components/ui/avatar-placeholder";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 // User interface for the user management functionality
 interface User {
@@ -188,30 +189,110 @@ export default function Dashboard() {
     setLogs(mockLogs);
   }, []);
 
-  // Chart data for Revenue Overview
-  const revenueData = [
-    { name: "Jan", value: 2500 },
-    { name: "Feb", value: 3300 },
-    { name: "Mar", value: 2900 },
-    { name: "Apr", value: 3800 },
-    { name: "May", value: 3500 },
-    { name: "Jun", value: 4000 },
-    { name: "Jul", value: 4200 },
-    { name: "Aug", value: 4800 },
-    { name: "Sep", value: 4600 },
-    { name: "Oct", value: 5000 },
-    { name: "Nov", value: 4700 },
-    { name: "Dec", value: 5200 },
-  ];
-
-  // Chart data for Traffic Sources
-  const trafficData = [
-    { name: "Organic Search", value: 40 },
-    { name: "Direct", value: 25 },
-    { name: "Social Media", value: 15 },
-    { name: "Email", value: 12 },
-    { name: "Referral", value: 8 },
-  ];
+  // Time-based chart data
+  const [selectedTimeRange, setSelectedTimeRange] = useState<"7days" | "30days" | "90days" | "year">("30days");
+  
+  // Revenue Overview data for different time periods
+  const revenueDataByTimeRange = {
+    // 7 days data - daily
+    "7days": [
+      { name: "Jun 10", value: 1200 },
+      { name: "Jun 11", value: 1450 },
+      { name: "Jun 12", value: 1320 },
+      { name: "Jun 13", value: 1680 },
+      { name: "Jun 14", value: 1550 },
+      { name: "Jun 15", value: 1700 },
+      { name: "Jun 16", value: 1830 },
+    ],
+    
+    // 30 days data - weekly
+    "30days": [
+      { name: "Week 1", value: 5200 },
+      { name: "Week 2", value: 6500 },
+      { name: "Week 3", value: 5900 },
+      { name: "Week 4", value: 7800 },
+    ],
+    
+    // 90 days data - monthly
+    "90days": [
+      { name: "Apr", value: 15800 },
+      { name: "May", value: 18300 },
+      { name: "Jun", value: 21500 },
+    ],
+    
+    // Year data - monthly
+    "year": [
+      { name: "Jan", value: 2500 },
+      { name: "Feb", value: 3300 },
+      { name: "Mar", value: 2900 },
+      { name: "Apr", value: 3800 },
+      { name: "May", value: 3500 },
+      { name: "Jun", value: 4000 },
+      { name: "Jul", value: 4200 },
+      { name: "Aug", value: 4800 },
+      { name: "Sep", value: 4600 },
+      { name: "Oct", value: 5000 },
+      { name: "Nov", value: 4700 },
+      { name: "Dec", value: 5200 },
+    ],
+  };
+  
+  // Traffic Sources data for different time periods
+  const trafficDataByTimeRange = {
+    // 7 days data
+    "7days": [
+      { name: "Organic Search", value: 35 },
+      { name: "Direct", value: 30 },
+      { name: "Social Media", value: 20 },
+      { name: "Email", value: 10 },
+      { name: "Referral", value: 5 },
+    ],
+    
+    // 30 days data
+    "30days": [
+      { name: "Organic Search", value: 40 },
+      { name: "Direct", value: 25 },
+      { name: "Social Media", value: 15 },
+      { name: "Email", value: 12 },
+      { name: "Referral", value: 8 },
+    ],
+    
+    // 90 days data
+    "90days": [
+      { name: "Organic Search", value: 42 },
+      { name: "Direct", value: 23 },
+      { name: "Social Media", value: 18 },
+      { name: "Email", value: 10 },
+      { name: "Referral", value: 7 },
+    ],
+    
+    // Year data
+    "year": [
+      { name: "Organic Search", value: 45 },
+      { name: "Direct", value: 20 },
+      { name: "Social Media", value: 18 },
+      { name: "Email", value: 9 },
+      { name: "Referral", value: 8 },
+    ],
+  };
+  
+  // Get current data based on selected time range
+  const revenueData = revenueDataByTimeRange[selectedTimeRange];
+  const trafficData = trafficDataByTimeRange[selectedTimeRange];
+  
+  // Handle time range change
+  const handleTimeRangeChange = (range: "7days" | "30days" | "90days" | "year") => {
+    setSelectedTimeRange(range);
+    toast({
+      title: "Time Range Updated",
+      description: `Data now showing for ${
+        range === "7days" ? "last 7 days" : 
+        range === "30days" ? "last 30 days" : 
+        range === "90days" ? "last 90 days" : 
+        "last 12 months"
+      }`
+    });
+  };
   
   // Filter users based on search term
   const filteredUsers = users.filter(user => 
@@ -494,22 +575,55 @@ export default function Dashboard() {
           </div>
           
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-            {/* Revenue Chart */}
-            <ChartPlaceholder
-              title="Revenue Overview"
-              type="area"
-              data={revenueData}
-              showSelect={true}
-              className="lg:col-span-2"
-            />
+            {/* Revenue Chart with Time Selection */}
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-100 dark:border-gray-700 lg:col-span-2">
+              <div className="p-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
+                <h3 className="text-base font-semibold text-gray-800 dark:text-gray-200">Revenue Overview</h3>
+                <Select 
+                  value={selectedTimeRange} 
+                  onValueChange={(value) => handleTimeRangeChange(value as "7days" | "30days" | "90days" | "year")}
+                >
+                  <SelectTrigger className="h-8 w-[150px]">
+                    <SelectValue placeholder="Select time range" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="7days">Last 7 days</SelectItem>
+                    <SelectItem value="30days">Last 30 days</SelectItem>
+                    <SelectItem value="90days">Last 90 days</SelectItem>
+                    <SelectItem value="year">Last 12 months</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="p-4">
+                <ChartPlaceholder
+                  title=""
+                  type="area"
+                  data={revenueData}
+                  showSelect={false}
+                />
+              </div>
+            </div>
             
             {/* Traffic Sources Chart */}
-            <ChartPlaceholder
-              title="Traffic Sources"
-              type="pie"
-              data={trafficData}
-              colors={["#6366f1", "#8b5cf6", "#10b981", "#f59e0b", "#ef4444"]}
-            />
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-100 dark:border-gray-700">
+              <div className="p-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
+                <h3 className="text-base font-semibold text-gray-800 dark:text-gray-200">Traffic Sources</h3>
+                <span className="text-xs text-gray-500 dark:text-gray-400">
+                  {selectedTimeRange === "7days" ? "Last 7 days" : 
+                  selectedTimeRange === "30days" ? "Last 30 days" : 
+                  selectedTimeRange === "90days" ? "Last 90 days" : 
+                  "Last 12 months"}
+                </span>
+              </div>
+              <div className="p-4">
+                <ChartPlaceholder
+                  title=""
+                  type="pie"
+                  data={trafficData}
+                  colors={["#6366f1", "#8b5cf6", "#10b981", "#f59e0b", "#ef4444"]}
+                />
+              </div>
+            </div>
           </div>
           
           {/* Table Section */}
