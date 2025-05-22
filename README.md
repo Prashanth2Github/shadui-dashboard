@@ -181,7 +181,7 @@ To deploy this full-stack app on [Render](https://render.com):
 Add your screenshots to the `/screenshots/` folder and link them here:
 
 - **Dashboard View**  
-  ![Dashboard View](./Dashboard%20Screenshots/Screenshot%202025-05-22%20232147.png)
+  [View Dashboard Screenshot](./Dashboard%20Screenshots/Screenshot%202025-05-22%20232147.png)
 
 - **Table View**  
   ![Table View](./screenshots/table-view.png)
