@@ -183,8 +183,8 @@ Add your screenshots to the `/screenshots/` folder and link them here:
 - **Dashboard View**  
   [View Dashboard Screenshot](./Dashboard%20Screenshots/Screenshot%202025-05-22%20232147.png)
 
-- **Table View**  
-  ![Table View](./screenshots/table-view.png)
+- **Transactions View**  
+  [View Transactions Screenshot](./Dashboard%20Screenshots/Screenshot%202025-05-22%20232214.png)
 
 ---
 
