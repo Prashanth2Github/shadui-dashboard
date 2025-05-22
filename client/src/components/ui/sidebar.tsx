@@ -144,7 +144,12 @@ export function Sidebar({ className }: SidebarProps) {
                 {section.title}
               </p>
               {section.items.map((item, j) => {
-                const isActive = location === item.href;
+                // Check if item is active by URL or by dashboard tab
+                const isDashboardTab = item.href.includes("dashboard?tab=");
+                const isActive = isDashboardTab
+                  ? location.startsWith("/dashboard") && window.location.href.includes(item.href.split("?")[1])
+                  : location === item.href;
+                
                 return (
                   <div key={j} onClick={closeSidebar}>
                     <Link href={item.href}>
