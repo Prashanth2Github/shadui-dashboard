@@ -68,11 +68,6 @@ export function Sidebar({ className }: SidebarProps) {
           label: "Analytics",
           href: "/analytics",
         },
-        {
-          icon: <FileText className="h-5 w-5" />,
-          label: "Reports",
-          href: "/reports",
-        },
       ],
     },
     {
@@ -80,18 +75,13 @@ export function Sidebar({ className }: SidebarProps) {
       items: [
         {
           icon: <Users className="h-5 w-5" />,
-          label: "Customers",
-          href: "/customers",
+          label: "User Management",
+          href: "/dashboard?tab=users",
         },
         {
-          icon: <Folder className="h-5 w-5" />,
-          label: "Projects",
-          href: "/projects",
-        },
-        {
-          icon: <CheckSquare className="h-5 w-5" />,
-          label: "Tasks",
-          href: "/tasks",
+          icon: <FileText className="h-5 w-5" />,
+          label: "Activity Logs",
+          href: "/dashboard?tab=logs",
         },
       ],
     },
@@ -102,11 +92,6 @@ export function Sidebar({ className }: SidebarProps) {
           icon: <Settings className="h-5 w-5" />,
           label: "Settings",
           href: "/settings",
-        },
-        {
-          icon: <HelpCircle className="h-5 w-5" />,
-          label: "Help & Support",
-          href: "/help",
         },
       ],
     },

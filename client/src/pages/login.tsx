@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useLocation } from "wouter";
+import { useLocation, Link } from "wouter";
 import { motion, AnimatePresence } from "framer-motion";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -88,6 +88,18 @@ export default function Login() {
               >
                 Sign in to access your dashboard
               </motion.p>
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.5, delay: 0.4 }}
+              >
+                <p className="text-sm text-gray-500 dark:text-gray-400">
+                  Don't have an account?{" "}
+                  <Button variant="link" className="p-0 font-medium text-primary hover:text-primary-dark">
+                    Register now
+                  </Button>
+                </p>
+              </motion.div>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-5">
