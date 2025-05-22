@@ -97,24 +97,44 @@ export default function Register() {
 
     setIsLoading(true);
 
-    // Simulate API call to register
-    setTimeout(() => {
-      // In a real app, this would be an API request to register the user
+    try {
+      // Send registration request to the API
+      const response = await fetch('/api/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: formData.username,
+          email: formData.email,
+          password: formData.password,
+          fullName: formData.fullName
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        // Registration failed
+        setError(data.message || "Registration failed");
+        setIsLoading(false);
+        return;
+      }
+
+      // Registration successful
       toast({
         title: "Registration successful",
         description: "Your account has been created successfully",
       });
       
-      // Store the user info in localStorage to simulate API registration
-      localStorage.setItem("user", JSON.stringify({
-        id: 2, // A new ID
-        username: formData.username,
-        email: formData.email
-      }));
-      
+      // Navigate to dashboard
       navigate("/dashboard");
+    } catch (error) {
+      console.error("Registration error:", error);
+      setError("An error occurred during registration. Please try again.");
+    } finally {
       setIsLoading(false);
-    }, 1500);
+    }
   };
 
   const renderStepIndicator = () => (

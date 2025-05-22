@@ -152,7 +152,21 @@ export function Sidebar({ className }: SidebarProps) {
                 
                 return (
                   <div key={j} onClick={closeSidebar}>
-                    <Link href={item.href}>
+                    <Link href={item.href} onClick={(e) => {
+                      // Special handling for dashboard tabs
+                      if (item.href.includes("dashboard?tab=")) {
+                        // Manually set URL search params to ensure they're applied
+                        const tabName = item.href.split("=")[1];
+                        window.history.pushState({}, "", `/dashboard?tab=${tabName}`);
+                        
+                        // Trigger page refresh with the new URL to ensure the dashboard
+                        // detects the tab change through useEffect with URL params
+                        window.location.reload();
+                        
+                        // Prevent default link behavior
+                        e.preventDefault();
+                      }
+                    }}>
                       <div
                         className={cn(
                           "flex items-center px-2 py-2 text-sm font-medium rounded-md transition-colors cursor-pointer",
