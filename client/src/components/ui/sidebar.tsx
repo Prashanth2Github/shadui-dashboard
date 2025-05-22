@@ -161,32 +161,30 @@ export function Sidebar({ className }: SidebarProps) {
               {section.items.map((item, j) => {
                 const isActive = location === item.href;
                 return (
-                  <Link
-                    key={j}
-                    href={item.href}
-                    onClick={closeSidebar}
-                  >
-                    <a
-                      className={cn(
-                        "flex items-center px-2 py-2 text-sm font-medium rounded-md transition-colors",
-                        isActive
-                          ? "bg-primary-50 text-primary-700 dark:bg-primary-900/20 dark:text-primary-400"
-                          : "text-gray-600 hover:bg-gray-50 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-200"
-                      )}
-                    >
-                      <span
+                  <div key={j} onClick={closeSidebar}>
+                    <Link href={item.href}>
+                      <div
                         className={cn(
-                          "mr-3",
+                          "flex items-center px-2 py-2 text-sm font-medium rounded-md transition-colors cursor-pointer",
                           isActive
-                            ? "text-primary-500 dark:text-primary-400"
-                            : "text-gray-400 dark:text-gray-500"
+                            ? "bg-primary-50 text-primary-700 dark:bg-primary-900/20 dark:text-primary-400"
+                            : "text-gray-600 hover:bg-gray-50 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-200"
                         )}
                       >
-                        {item.icon}
-                      </span>
-                      {item.label}
-                    </a>
-                  </Link>
+                        <span
+                          className={cn(
+                            "mr-3",
+                            isActive
+                              ? "text-primary-500 dark:text-primary-400"
+                              : "text-gray-400 dark:text-gray-500"
+                          )}
+                        >
+                          {item.icon}
+                        </span>
+                        {item.label}
+                      </div>
+                    </Link>
+                  </div>
                 );
               })}
             </div>
